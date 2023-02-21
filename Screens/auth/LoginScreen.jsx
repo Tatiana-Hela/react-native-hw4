@@ -24,6 +24,7 @@ const initialState = {
 const LoginScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const [isTextInputOnFocus, setTextInputOnFocus] = useState(false);
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -74,18 +75,29 @@ const LoginScreen = ({ navigation }) => {
                     keyboardType="email-address"
                     onFocus={() => {
                       setIsShowKeyboard(true);
+                      setTextInputOnFocus(true);
+                    }}
+                    onBlur={() => {
+                      setTextInputOnFocus(false);
                     }}
                     placeholder="Адрес электронной почты"
                     value={state.email}
                     onChangeText={(value) =>
                       setState((prevState) => ({ ...prevState, email: value }))
                     }
-                    style={styles.input}
+                    style={{
+                      ...styles.input,
+                      borderColor: isTextInputOnFocus ? `#FF6C00` : `#E8E8E8`,
+                    }}
                   />
                   <View>
                     <TextInput
                       onFocus={() => {
                         setIsShowKeyboard(true);
+                        setTextInputOnFocus(true);
+                      }}
+                      onBlur={() => {
+                        setTextInputOnFocus(false);
                       }}
                       placeholder="Пароль"
                       value={state.password}
@@ -96,7 +108,10 @@ const LoginScreen = ({ navigation }) => {
                         }))
                       }
                       secureTextEntry={true}
-                      style={styles.input}
+                      style={{
+                        ...styles.input,
+                        borderColor: isTextInputOnFocus ? `#FF6C00` : `#E8E8E8`,
+                      }}
                     />
                     <Text style={styles.textPassword}>Показать</Text>
                   </View>
@@ -146,6 +161,9 @@ const styles = StyleSheet.create({
     color: "#212121",
     marginBottom: 32,
   },
+  inputOnFocus: { borderColor: "#FF6C00" },
+  inputOnBlur: { borderColor: "#E8E8E8" },
+
   input: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
