@@ -11,7 +11,8 @@ import CreatePostsScreen from "./Screens/mainScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/mainScreen/ProfileScreen";
 
 ///icons
-import Icon from "react-native-vector-icons/FontAwesome";
+// import Icon from "react-native-vector-icons/FontAwesome";
+import { Feather } from "@expo/vector-icons";
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -37,15 +38,31 @@ export const useRoute = (isAuth) => {
     <MainTab.Navigator screenOptions={{ showLabel: false }}>
       <MainTab.Screen
         options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <FontAwesomeIcon icon="fa-light fa-grid-2" />
-          ),
+          tabBarIcon: ({ focused, size, color }) => {
+            return <Feather name="grid" size={24} color="#BDBDBD" />;
+          },
         }}
         name="Post"
         component={PostsScreen}
       />
-      <MainTab.Screen name="Create" component={CreatePostsScreen} />
-      <MainTab.Screen name="Profile" component={ProfileScreen} />
+      <MainTab.Screen
+        options={{
+          tabBarIcon: ({ focused, size, color }) => {
+            return <Feather name="plus" size={24} color="#BDBDBD" />;
+          },
+        }}
+        name="Create"
+        component={CreatePostsScreen}
+      />
+      <MainTab.Screen
+        options={{
+          tabBarIcon: ({ focused, size, color }) => {
+            return <Feather name="user" size={24} color="#BDBDBD" />;
+          },
+        }}
+        name="Profile"
+        component={ProfileScreen}
+      />
     </MainTab.Navigator>
   );
 };
