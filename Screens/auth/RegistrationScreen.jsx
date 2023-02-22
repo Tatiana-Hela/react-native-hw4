@@ -25,6 +25,11 @@ const initialState = {
 const RegistrationScreens = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const [isFocus, setIsFocus] = useState({
+    login: false,
+    email: false,
+    password: false,
+  });
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -54,55 +59,75 @@ const RegistrationScreens = ({ navigation }) => {
           style={styles.image}
           source={require("../../assets/images/photo-bg2x.jpg")}
         >
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
-            <View
-              style={{
-                ...styles.wrapperForm,
-                paddingBottom: setIsShowKeyboard ? 20 : 45,
-              }}
-            >
-              <View style={styles.imageWrapper}>
-                <Image />
-                <Image
-                  source={require("../../assets/add.png")}
-                  style={styles.addIcon}
-                />
+          <View style={styles.wrapperForm}>
+            <View style={styles.imageWrapper}>
+              <Image />
+              <Image
+                source={require("../../assets/add.png")}
+                style={styles.addIcon}
+              />
+            </View>
+            <View style={styles.form}>
+              <View>
+                <Text style={styles.title}>Регистрация</Text>
               </View>
-              <View style={styles.form}>
-                <View>
-                  <Text style={styles.title}>Регистрация</Text>
-                </View>
-
-                <View>
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+              >
+                <View
+                  style={{
+                    paddingBottom:
+                      isFocus.email || isFocus.password || isFocus.login
+                        ? 80
+                        : 0,
+                  }}
+                >
                   <TextInput
                     onFocus={() => {
                       setIsShowKeyboard(true);
+                      setIsFocus({ ...isFocus, login: true });
                     }}
+                    onBlur={() => {
+                      setIsFocus({ ...isFocus, login: false });
+                    }}
+                    placeholderTextColor="#BDBDBD"
                     placeholder="Логин"
                     value={state.login}
                     onChangeText={(value) =>
                       setState((prevState) => ({ ...prevState, login: value }))
                     }
-                    style={styles.input}
+                    style={{
+                      ...styles.input,
+                      borderColor: isFocus.login ? `#FF6C00` : `#E8E8E8`,
+                    }}
                   />
                   <TextInput
                     keyboardType="email-address"
                     onFocus={() => {
                       setIsShowKeyboard(true);
+                      setIsFocus({ ...isFocus, email: true });
+                    }}
+                    onBlur={() => {
+                      setIsFocus({ ...isFocus, email: false });
                     }}
                     placeholder="Адрес электронной почты"
                     value={state.email}
                     onChangeText={(value) =>
                       setState((prevState) => ({ ...prevState, email: value }))
                     }
-                    style={styles.input}
+                    style={{
+                      ...styles.input,
+                      borderColor: isFocus.email ? `#FF6C00` : `#E8E8E8`,
+                    }}
                   />
                   <View>
                     <TextInput
                       onFocus={() => {
                         setIsShowKeyboard(true);
+                        setIsFocus({ ...isFocus, password: true });
+                      }}
+                      onBlur={() => {
+                        setIsFocus({ ...isFocus, password: false });
                       }}
                       placeholder="Пароль"
                       value={state.password}
@@ -113,29 +138,32 @@ const RegistrationScreens = ({ navigation }) => {
                         }))
                       }
                       secureTextEntry={true}
-                      style={styles.input}
+                      style={{
+                        ...styles.input,
+                        borderColor: isFocus.password ? `#FF6C00` : `#E8E8E8`,
+                      }}
                     />
                     <Text style={styles.textPassword}>Показать</Text>
                   </View>
                 </View>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={keyboardHide}
-                  style={styles.button}
-                >
-                  <Text style={styles.textButton}>Зарегистрироваться</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity>
-                <Text
-                  style={styles.textLink}
-                  onPress={() => navigation.navigate("Login")}
-                >
-                  Уже есть аккаунт? Войти
-                </Text>
+              </KeyboardAvoidingView>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={keyboardHide}
+                style={styles.button}
+              >
+                <Text style={styles.textButton}>Зарегистрироваться</Text>
               </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
+            <TouchableOpacity>
+              <Text
+                style={styles.textLink}
+                onPress={() => navigation.navigate("Login")}
+              >
+                Уже есть аккаунт? Войти
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -176,6 +204,7 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
   wrapperForm: {
+    paddingBottom: 45,
     paddingTop: 92,
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
