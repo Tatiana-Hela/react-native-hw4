@@ -11,7 +11,6 @@ import CreatePostsScreen from "./Screens/mainScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/mainScreen/ProfileScreen";
 
 ///icons
-// import Icon from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
 
 const AuthStack = createStackNavigator();
@@ -35,30 +34,41 @@ export const useRoute = (isAuth) => {
     );
   }
   return (
-    <MainTab.Navigator screenOptions={{ showLabel: false }}>
+    <MainTab.Navigator screenOptions={{ tabBarStyle: { height: 83 } }}>
       <MainTab.Screen
         options={{
-          tabBarIcon: ({ focused, size, color }) => {
-            return <Feather name="grid" size={24} color="#BDBDBD" />;
-          },
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="grid" size={size} color={color} />
+          ),
+          tabBarActiveTintColor: "#BDBDBD",
+          tabBarShowLabel: false,
+          title: "Публикации",
         }}
         name="Post"
         component={PostsScreen}
       />
       <MainTab.Screen
         options={{
-          tabBarIcon: ({ focused, size, color }) => {
-            return <Feather name="plus" size={24} color="#BDBDBD" />;
-          },
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="plus" size={size} color={color} />
+          ),
+          tabBarActiveBackgroundColor: "#FF6C00",
+          tabBarActiveTintColor: "#FFFFFF",
+          tabBarShowLabel: false,
+          title: "Создать публикацию",
         }}
         name="Create"
         component={CreatePostsScreen}
       />
       <MainTab.Screen
         options={{
-          tabBarIcon: ({ focused, size, color }) => {
-            return <Feather name="user" size={24} color="#BDBDBD" />;
-          },
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="user" size={size} color={color} />
+          ),
+          tabBarActiveBackgroundColor: "#FF6C00",
+          tabBarActiveTintColor: "#FFFFFF",
+          tabBarShowLabel: false,
+          headerShown: false,
         }}
         name="Profile"
         component={ProfileScreen}
