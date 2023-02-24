@@ -34,7 +34,16 @@ export const useRoute = (isAuth) => {
     );
   }
   return (
-    <MainTab.Navigator screenOptions={{ tabBarStyle: { height: 83 } }}>
+    <MainTab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          height: 83,
+          display: "flex",
+          gap: 30,
+          marginHorizontal: 80,
+        },
+      }}
+    >
       <MainTab.Screen
         options={{
           tabBarIcon: ({ focused, size, color }) => (
@@ -43,6 +52,9 @@ export const useRoute = (isAuth) => {
           tabBarActiveTintColor: "#BDBDBD",
           tabBarShowLabel: false,
           title: "Публикации",
+          headerRight: () => (
+            <Feather name="log-out" size={24} color="#BDBDBD" />
+          ),
         }}
         name="Post"
         component={PostsScreen}
