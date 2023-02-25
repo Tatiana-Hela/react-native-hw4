@@ -34,6 +34,7 @@ const RegistrationScreens = ({ navigation }) => {
     "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
   });
+  const [isSecureEntry, setIsSecureEntry] = useState(true);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -137,13 +138,21 @@ const RegistrationScreens = ({ navigation }) => {
                           password: value,
                         }))
                       }
-                      secureTextEntry={true}
+                      secureTextEntry={isSecureEntry}
                       style={{
                         ...styles.input,
                         borderColor: isFocus.password ? `#FF6C00` : `#E8E8E8`,
                       }}
                     />
-                    <Text style={styles.textPassword}>Показать</Text>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.textPassword}
+                      onPress={() => {
+                        setIsSecureEntry((prevState) => !prevState);
+                      }}
+                    >
+                      <Text>{isSecureEntry ? "Показать" : "Скрыть"}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </KeyboardAvoidingView>
@@ -151,6 +160,7 @@ const RegistrationScreens = ({ navigation }) => {
                 activeOpacity={0.8}
                 onPress={keyboardHide}
                 style={styles.button}
+                onPress={() => navigation.navigate("Home")}
               >
                 <Text style={styles.textButton}>Зарегистрироваться</Text>
               </TouchableOpacity>

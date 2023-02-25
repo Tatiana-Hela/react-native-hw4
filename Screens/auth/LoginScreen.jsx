@@ -33,6 +33,7 @@ const LoginScreen = ({ navigation }) => {
     "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
   });
+  const [isSecureEntry, setIsSecureEntry] = useState(true);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -60,10 +61,10 @@ const LoginScreen = ({ navigation }) => {
         >
           <View style={styles.wrapperForm}>
             <View style={styles.form}>
-              <Image
+              {/* <Image
                 style={styles.close}
                 source={require("../../assets/X.png")}
-              />
+              /> */}
               <Text style={styles.title}>Войти</Text>
               <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -111,13 +112,22 @@ const LoginScreen = ({ navigation }) => {
                           password: value,
                         }))
                       }
-                      secureTextEntry={true}
+                      secureTextEntry={isSecureEntry}
+                      iconPosition="right"
                       style={{
                         ...styles.input,
                         borderColor: isFocus.password ? `#FF6C00` : `#E8E8E8`,
                       }}
                     />
-                    <Text style={styles.textPassword}>Показать</Text>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.textPassword}
+                      onPress={() => {
+                        setIsSecureEntry((prevState) => !prevState);
+                      }}
+                    >
+                      <Text>{isSecureEntry ? "Показать" : "Скрыть"}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </KeyboardAvoidingView>
@@ -125,6 +135,12 @@ const LoginScreen = ({ navigation }) => {
                 activeOpacity={0.8}
                 onPress={keyboardHide}
                 style={styles.button}
+                onPress={() =>
+                  navigation.navigate("Home", {
+                    screen: "PostsScreen",
+                    params: { user: "Natali" },
+                  })
+                }
               >
                 <Text style={styles.textButton}>Войти</Text>
               </TouchableOpacity>

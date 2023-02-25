@@ -9,6 +9,7 @@ import LoginScreen from "./Screens/auth/LoginScreen";
 import PostsScreen from "./Screens/mainScreen/PostsScreen";
 import CreatePostsScreen from "./Screens/mainScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/mainScreen/ProfileScreen";
+// import Home from "./Screens/mainScreen/Home";
 
 ///icons
 import { Feather } from "@expo/vector-icons";
@@ -16,7 +17,16 @@ import { Feather } from "@expo/vector-icons";
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
+const Home = () => {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen name="Post" component={PostsScreen} />
+    </AuthStack.Navigator>
+  );
+};
+
 export const useRoute = (isAuth) => {
+  console.log(isAuth);
   if (!isAuth) {
     return (
       <AuthStack.Navigator>
@@ -29,6 +39,11 @@ export const useRoute = (isAuth) => {
           options={{ headerShown: false }}
           name="Registration"
           component={RegistrationScreens}
+        />
+        <AuthStack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
         />
       </AuthStack.Navigator>
     );
