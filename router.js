@@ -50,12 +50,13 @@ export const useRoute = (isAuth) => {
   }
   return (
     <MainTab.Navigator
+      initialRouteName="Post"
       screenOptions={{
         tabBarStyle: {
           height: 83,
           display: "flex",
           gap: 30,
-          marginHorizontal: 80,
+          paddingHorizontal: 80,
         },
       }}
     >

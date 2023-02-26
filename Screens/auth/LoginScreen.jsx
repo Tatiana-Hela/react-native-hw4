@@ -75,6 +75,7 @@ const LoginScreen = ({ navigation }) => {
                   }}
                 >
                   <TextInput
+                    autoComplete="on"
                     keyboardType="email-address"
                     onFocus={() => {
                       setIsShowKeyboard(true);
@@ -96,6 +97,7 @@ const LoginScreen = ({ navigation }) => {
                   />
                   <View>
                     <TextInput
+                      autoComplete="on"
                       onFocus={() => {
                         setIsShowKeyboard(true);
                         setIsFocus({ ...isFocus, password: true });
@@ -135,12 +137,6 @@ const LoginScreen = ({ navigation }) => {
                 activeOpacity={0.8}
                 onPress={keyboardHide}
                 style={styles.button}
-                onPress={() =>
-                  navigation.navigate("Home", {
-                    screen: "PostsScreen",
-                    params: { user: "Natali" },
-                  })
-                }
               >
                 <Text style={styles.textButton}>Войти</Text>
               </TouchableOpacity>
