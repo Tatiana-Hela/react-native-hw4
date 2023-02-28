@@ -17,14 +17,6 @@ import { Feather } from "@expo/vector-icons";
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-const Home = () => {
-  return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen name="Post" component={PostsScreen} />
-    </AuthStack.Navigator>
-  );
-};
-
 export const useRoute = (isAuth) => {
   console.log(isAuth);
   if (!isAuth) {
@@ -40,11 +32,6 @@ export const useRoute = (isAuth) => {
           name="Registration"
           component={RegistrationScreens}
         />
-        <AuthStack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
       </AuthStack.Navigator>
     );
   }
@@ -52,11 +39,14 @@ export const useRoute = (isAuth) => {
     <MainTab.Navigator
       initialRouteName="Post"
       screenOptions={{
+        tabBarShowLabel: false,
         tabBarStyle: {
           height: 83,
           display: "flex",
           gap: 30,
           paddingHorizontal: 80,
+          borderTopColor: "#E5E5E5",
+          borderTopWidth: 1,
         },
       }}
     >
@@ -66,7 +56,6 @@ export const useRoute = (isAuth) => {
             <Feather name="grid" size={size} color={color} />
           ),
           tabBarActiveTintColor: "#BDBDBD",
-          tabBarShowLabel: false,
           title: "Публикации",
           headerRight: () => (
             <Feather name="log-out" size={24} color="#BDBDBD" />
@@ -82,7 +71,6 @@ export const useRoute = (isAuth) => {
           ),
           tabBarActiveBackgroundColor: "#FF6C00",
           tabBarActiveTintColor: "#FFFFFF",
-          tabBarShowLabel: false,
           title: "Создать публикацию",
         }}
         name="Create"
@@ -95,7 +83,6 @@ export const useRoute = (isAuth) => {
           ),
           tabBarActiveBackgroundColor: "#FF6C00",
           tabBarActiveTintColor: "#FFFFFF",
-          tabBarShowLabel: false,
           headerShown: false,
         }}
         name="Profile"

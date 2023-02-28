@@ -75,7 +75,6 @@ const LoginScreen = ({ navigation }) => {
                   }}
                 >
                   <TextInput
-                    autoComplete="on"
                     keyboardType="email-address"
                     onFocus={() => {
                       setIsShowKeyboard(true);
@@ -97,7 +96,6 @@ const LoginScreen = ({ navigation }) => {
                   />
                   <View>
                     <TextInput
-                      autoComplete="on"
                       onFocus={() => {
                         setIsShowKeyboard(true);
                         setIsFocus({ ...isFocus, password: true });
