@@ -45,8 +45,6 @@ export const useRoute = (isAuth) => {
           display: "flex",
           gap: 30,
           paddingHorizontal: 80,
-          borderTopColor: "#E5E5E5",
-          borderTopWidth: 1,
         },
       }}
     >
