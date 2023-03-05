@@ -37,7 +37,7 @@ export const useRoute = (isAuth) => {
   }
   return (
     <MainTab.Navigator
-      initialRouteName="Post"
+      initialRouteName="Posts"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -59,7 +59,7 @@ export const useRoute = (isAuth) => {
             <Feather name="log-out" size={24} color="#BDBDBD" />
           ),
         }}
-        name="Post"
+        name="Posts"
         component={PostsScreen}
       />
       <MainTab.Screen
