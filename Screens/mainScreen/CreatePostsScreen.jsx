@@ -6,15 +6,17 @@ import {
   Image,
   Text,
   TextInput,
+  Platform,
 } from "react-native";
 import { Camera } from "expo-camera";
-// import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
+  const [location, setLocation] = useState(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [permissionStatus, setPermissionStatus] = useState(null);
@@ -22,15 +24,15 @@ const CreatePostsScreen = ({ navigation }) => {
   const handleCameraReady = () => {
     setIsCameraReady(true);
   };
-  // const handleMountError = (error) => {
-  //   console.error("Failed to mount camera", error);
-  // };
   const takePhoto = async () => {
     if (camera && isCameraReady) {
-      // console.log("taking picture");
       try {
         const photo = await camera.takePictureAsync();
         console.log("photo", photo.uri);
+        const location = await Location.getCurrentPositionAsync({});
+        console.log("latitude", location.coords.latitude);
+        console.log("longitude", location.coords.longitude);
+        setLocation(location);
         setPhoto(photo.uri);
       } catch (error) {
         console.error("Failed to take photo", error);
@@ -46,20 +48,32 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    const getPermissionStatus = async () => {
+    const requestCameraPermission = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setPermissionStatus(status);
+      if (status !== "granted") {
+        console.log("Camera permission denied");
+      } else {
+        console.log("Camera permission granted");
+      }
     };
-    getPermissionStatus();
+
+    const requestLocationPermission = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Location permission denied");
+      } else {
+        console.log("Location permission granted");
+      }
+    };
+
+    if (Platform.OS === "android" && !Constants.isDevice) {
+      console.log("Location permission denied because emulator has no GPS");
+    } else {
+      requestLocationPermission();
+    }
+
+    requestCameraPermission();
   }, []);
-
-  if (!permissionStatus) {
-    return <View />;
-  }
-
-  if (permissionStatus !== "granted") {
-    return <Text>No access to camera</Text>;
-  }
 
   return (
     <View style={styles.container}>
@@ -68,7 +82,6 @@ const CreatePostsScreen = ({ navigation }) => {
         style={styles.camera}
         ref={(ref) => setCamera(ref)}
         onCameraReady={handleCameraReady}
-        // onMountError={handleMountError}
       >
         {photo && (
           <View style={styles.takePhotoContainer}>
@@ -85,14 +98,14 @@ const CreatePostsScreen = ({ navigation }) => {
       <Text style={styles.text}>Загрузите фото</Text>
       <View>
         <TextInput style={styles.input} placeholder="Название..." />
-        <View style={styles.inputMap}>
+        <View style={styles.inputMapWrapper}>
           <Feather
             name="map-pin"
-            size={24}
+            size={18}
             color="#BDBDBD"
             style={styles.mapIcon}
           />
-          <TextInput style={styles.input} placeholder="Местность..." />
+          <TextInput style={styles.inputMap} placeholder="Местность..." />
         </View>
         <TouchableOpacity style={styles.button} onPress={sendPhoto}>
           <Text style={styles.textButton}>Опубликовать</Text>
@@ -142,6 +155,7 @@ const styles = StyleSheet.create({
     color: "#BDBDBD",
   },
   input: {
+    marginTop: 32,
     fontSize: 16,
     lineHeight: 19,
     height: 50,
@@ -152,8 +166,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6C00",
     borderRadius: 100,
     height: 51,
-    marginTop: 43,
-    marginBottom: 16,
+    marginTop: 32,
+    marginBottom: 120,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -162,5 +176,21 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
+  },
+  inputMapWrapper: {
+    position: "relative",
+  },
+  mapIcon: {
+    position: "absolute",
+    top: 24,
+  },
+  inputMap: {
+    marginTop: 10,
+    paddingLeft: 20,
+    fontSize: 16,
+    lineHeight: 19,
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E8E8",
   },
 });
