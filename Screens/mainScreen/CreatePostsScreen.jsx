@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   Platform,
+  Button,
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
@@ -19,11 +20,14 @@ const CreatePostsScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [permissionStatus, setPermissionStatus] = useState(null);
+  const [formValues, setFormValues] = useState({ title: "", location: "" });
+  const [isFormValid, setIsFormValid] = useState(false);
+  console.log(isFormValid);
 
   const handleCameraReady = () => {
     setIsCameraReady(true);
   };
+
   const takePhoto = async () => {
     if (camera && isCameraReady) {
       try {
@@ -42,9 +46,17 @@ const CreatePostsScreen = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    if (formValues.title && formValues.location) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [formValues]);
+
   const sendPhoto = () => {
     console.log("navigation", navigation);
-    navigation.navigate("Posts", { photo });
+    navigation.navigate("DefaultScreen", { photo });
   };
 
   useEffect(() => {
@@ -87,7 +99,7 @@ const CreatePostsScreen = ({ navigation }) => {
           <View style={styles.takePhotoContainer}>
             <Image
               source={{ uri: photo }}
-              style={{ height: 100, width: 100 }}
+              style={{ height: "100%", width: "100%" }}
             />
           </View>
         )}
@@ -95,9 +107,20 @@ const CreatePostsScreen = ({ navigation }) => {
           <FontAwesome name="camera" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </Camera>
-      <Text style={styles.text}>Загрузите фото</Text>
+      {!photo ? (
+        <Text style={styles.text}>Загрузите фото</Text>
+      ) : (
+        <Text style={styles.text}>Редактировать фото</Text>
+      )}
       <View>
-        <TextInput style={styles.input} placeholder="Название..." />
+        <TextInput
+          style={styles.input}
+          placeholder="Название..."
+          value={formValues.title}
+          onChangeText={(value) =>
+            setFormValues({ ...formValues, title: value })
+          }
+        />
         <View style={styles.inputMapWrapper}>
           <Feather
             name="map-pin"
@@ -105,10 +128,31 @@ const CreatePostsScreen = ({ navigation }) => {
             color="#BDBDBD"
             style={styles.mapIcon}
           />
-          <TextInput style={styles.inputMap} placeholder="Местность..." />
+          <TextInput
+            style={styles.inputMap}
+            placeholder="Местность..."
+            value={formValues.location}
+            onChangeText={(value) =>
+              setFormValues({ ...formValues, location: value })
+            }
+          />
         </View>
-        <TouchableOpacity style={styles.button} onPress={sendPhoto}>
-          <Text style={styles.textButton}>Опубликовать</Text>
+        <TouchableOpacity
+          style={[styles.button, !isFormValid && styles.disabledButton]}
+          onPress={() => {
+            if (isFormValid) {
+              sendPhoto();
+            }
+          }}
+        >
+          <Text
+            style={{
+              ...styles.textButton,
+              color: isFormValid ? "#FFFFFF" : "#BDBDBD",
+            }}
+          >
+            Опубликовать
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -131,6 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    overflow: "hidden",
   },
   cameraBtn: {
     alignItems: "center",
@@ -142,11 +187,10 @@ const styles = StyleSheet.create({
   },
   takePhotoContainer: {
     position: "absolute",
-    top: 10,
-    left: 10,
-    borderColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 8,
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
   },
   text: {
     marginTop: 8,
@@ -170,6 +214,9 @@ const styles = StyleSheet.create({
     marginBottom: 120,
     justifyContent: "center",
     alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#F6F6F6",
   },
   textButton: {
     color: "#FFFFFF",
