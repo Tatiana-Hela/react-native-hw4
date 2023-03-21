@@ -3,11 +3,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RegistrationScreens from "./Screens/auth/RegistrationScreen";
 import LoginScreen from "./Screens/auth/LoginScreen";
-import { useRoute, useNavigation } from "@react-navigation/native";
 import PostsScreen from "./Screens/mainScreen/PostsScreen";
 import CreatePostsScreen from "./Screens/mainScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/mainScreen/ProfileScreen";
-// import Home from "./Screens/mainScreen/Home";
+import Home from "./Screens/mainScreen/Home";
 
 ///icons
 import { Feather } from "@expo/vector-icons";
@@ -15,11 +14,8 @@ import { Feather } from "@expo/vector-icons";
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-const useRouteNav = (isAuth) => {
+const useRoute = (isAuth) => {
   console.log(isAuth);
-
-  const route = useRoute(); // хук для получения текущего маршрута
-  const navigation = useNavigation(); // хук для получения объекта навигации
 
   if (!isAuth) {
     return (
@@ -36,18 +32,6 @@ const useRouteNav = (isAuth) => {
         />
       </AuthStack.Navigator>
     );
-  }
-  if (route.state?.routes[route.state.index]?.name === "Create") {
-    navigation.setOptions({
-      headerShown: false,
-      tabBarVisible: false,
-    });
-
-    return <CreatePostsScreen />;
-  } else {
-    navigation.setOptions({
-      tabBarVisible: true,
-    });
   }
 
   return (
@@ -103,4 +87,4 @@ const useRouteNav = (isAuth) => {
     </MainTab.Navigator>
   );
 };
-export default useRouteNav;
+export default useRoute;
